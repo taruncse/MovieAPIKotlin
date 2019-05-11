@@ -47,26 +47,28 @@ class AllMovieViewModel : ViewModel() {
 
     private fun loadData() {
 
-/*
+
         val apiService = ApiService(position)
 
-        apiService.getData(pageNumber, object : Callback {
-            override fun onResponse(call: Call<*>, response: Response<*>) {
-                val movie = response.body() as Movie?
 
-                if (movie != null) {
-                    singleData[position] = movie.results
-                    movieList!!.setValue(singleData)
-                }
-            }
 
-            override fun onFailure(call: Call<*>, t: Throwable) {
+        apiService.getData(pageNumber, object : Callback<Movie> {
+            override fun onFailure(call: Call<Movie>, t: Throwable) {
                 if (t is SocketTimeoutException) {
                     //Toast.makeText(getContext(), "Request Timeout. Please try again!", Toast.LENGTH_LONG).show();
                 } else {
                     //Toast.makeText(getContext(), "Connection Error!", Toast.LENGTH_LONG).show();
+                }            }
+
+            override fun onResponse(call: Call<Movie>, response: Response<Movie>) {
+                val movie = response.body() as Movie?
+
+                if (movie != null) {
+                    //singleData[position] = movie.results
+                    singleData.put(position,movie.results!!)
+                    movieList!!.setValue(singleData)
                 }
             }
-        })*/
+        })
     }
 }

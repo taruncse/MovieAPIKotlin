@@ -12,8 +12,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
+import androidx.lifecycle.Observer
 import com.tkb.movie.adapter.AllMovieAdapter
 import com.tkb.movieapikotlin.R
+import java.security.acl.Owner
 
 class AllMovieFragment : Fragment() {
     private val paginator = PublishProcessor.create<Int>()
@@ -37,7 +39,7 @@ class AllMovieFragment : Fragment() {
 
         // getActivity().setTitle(Constant.getFragments().get(position));
         songRecyclerView = view.findViewById(R.id.song_list)
-        gridLayoutManager = GridLayoutManager(context, 3)
+        gridLayoutManager = GridLayoutManager(activity, 3)
         songRecyclerView?.layoutManager = gridLayoutManager
         songRecyclerView?.setHasFixedSize(true)
 
@@ -88,8 +90,17 @@ class AllMovieFragment : Fragment() {
     }
 
     private fun loadData() {
-       /* model = ViewModelProviders.of(this).get(AllMovieViewModel::class.java!!)
-        model?.getMovie(position, pageNumber)?.observe(this, { movieList ->
+        model = ViewModelProviders.of(this).get(AllMovieViewModel::class.java!!)
+
+        model?.getMovie(position, pageNumber)?.observe(this, Observer {
+
+            paginationAdapter!!.addItems(it[position]!!)
+
+            paginationAdapter!!.notifyDataSetChanged()
+            loading = false
+            progressBar!!.visibility = View.INVISIBLE
+        })
+      /*  model?.getMovie(position, pageNumber)?.observe(this, { movieList ->
 
             paginationAdapter.addItems(movieList.get(position))
 
